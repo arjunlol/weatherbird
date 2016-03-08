@@ -13,14 +13,20 @@ rain_hashtags = ['#wetpets ','#brella ','#catsndogs ','#monsoon ']
 
 if __name__ == "__main__":
 
+
     if len(argv) < 2:
-        print("City defaulting to Toronto, enter city name as argument to override")
+        print("Please provide city name and timezone delay from UTC, assuming toronto and 5")
         city_name = 'Toronto'
+        delay = 5
     else:
         city_name = argv[1]
+        if len(argv) < 3:
+            delay = 5
+        else:
+            delay = int(argv[2])
 
 #Timezone info static on EST for now
-    now = datetime.datetime.utcnow() - datetime.timedelta(hours=5)
+    now = datetime.datetime.utcnow() - datetime.timedelta(hours=delay)
 
 #Initialize historic info for city
     city_hist_info = weather_data.HistoricInfoForCity(city_id[str(city_name)])
