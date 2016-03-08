@@ -15,22 +15,22 @@ class account:
         self.api = tweepy.API(auth)
 
     def tweet_min_extreme(self, temp, temp_record, city):
-        message = "{0}'s temperature of {1} C is {2} C below the record low of {3} C for this date! #extremeweather {4}".format(city, temp, round(abs(temp - temp_record),1), temp_record, city_hashtags[str(city)])
+        message = "{0}'s current temperature of {1}°C is {2}° below the record low of {3}°C for this date! #extremeweather {4}".format(city, temp, round(abs(temp - temp_record),1), temp_record, city_hashtags[str(city)])
         print(message)
         self.custom_message(message)
 
     def tweet_max_extreme(self, temp, temp_record, city):
-        message = "{0}'s temperature of {1} C is {2} C above the record high of {3} C for this date! #extremeweather {4}".format(city, temp, round(abs(temp - temp_record),1), temp_record, city_hashtags[str(city)])
+        message = "{0}'s current temperature of {1}°C is {2}° above the record high of {3}°C for this date! #extremeweather {4}".format(city, temp, round(abs(temp - temp_record),1), temp_record, city_hashtags[str(city)])
         print(message)
         self.custom_message(message)
 
     def tweet_min_avg(self, temp, temp_record, city):
-        message = "{0}'s temperature of {1} C is {2} C below the average low of {3} C for this date! #extremeweather {4}".format(city, temp, round(abs(temp - temp_record),1), temp_record, city_hashtags[str(city)])
+        message = "{0}'s current temperature of {1}°C is {2}° below the average low of {3}°C for this date! #extremeweather {4}".format(city, temp, round(abs(temp - temp_record),1), temp_record, city_hashtags[str(city)])
         print(message)
         self.custom_message(message)
 
     def tweet_max_avg(self, temp, temp_record, city):
-        message = "{0}'s temperature of {1} C is {2} C above the average high of {3} C for this date! #extremeweather {4}".format(city, temp, round(abs(temp - temp_record),1), temp_record, city_hashtags[str(city)])
+        message = "{0}'s current temperature of {1}°C is {2}° above the average high of {3}°C for this date! #extremeweather {4}".format(city, temp, round(abs(temp - temp_record),1), temp_record, city_hashtags[str(city)])
         print(message)
         self.custom_message(message)
 
