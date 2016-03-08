@@ -28,7 +28,7 @@ if __name__ == "__main__":
     print("min: {0} max: {1}\nmin_avg: {2} max_avg: {3}\nmin_extreme: {4} max_extreme: {5}".format(round(min_current,1), round(max_current,1), hist_weather.min_avg, hist_weather.max_avg,hist_weather.min_extrm, hist_weather.max_extrm))
 
     #log data for future graphing
-    data_display.log_to_file('data//{0}-{1}'.format(city_name,str(now.date())), min_current, max_current, min_current < hist_weather.min_extrm, max_current >  hist_weather.max_avg, now)
+    data_display.log_to_file('data//{0}-{1}'.format(city_name,str(now.date())), min_current, max_current, min_current < hist_weather.min_extrm, max_current >  hist_weather.max_extrm, now)
 
     twit = twit_bot.account(city_name)
 
