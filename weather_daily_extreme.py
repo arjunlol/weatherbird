@@ -1,10 +1,11 @@
-__author__ = 'Fritz'
+from sys import argv
+
 import weather_data
 import twit_bot
 import datetime
 import random
 
-from city_id import toronto_id
+from city_id import city_id
 
 hashtags = ['#makeupyourmind ','#fromthevault ','#wildweather ','#xweather ']
 snow_hashtags = ['#toqueson ','#snowday ','#frosty ','#blzrd ', '#snowday ']
@@ -12,55 +13,51 @@ rain_hashtags = ['#wetpets ','#brella ','#catsndogs ','#monsoon ']
 
 if __name__ == "__main__":
 
+    if len(argv) < 2:
+        print("City defaulting to Toronto, enter city name as argument to override")
+        city_name = 'Toronto'
+    else:
+        city_name = argv[1]
+
+#Timezone info static on EST for now
     now = datetime.datetime.utcnow() - datetime.timedelta(hours=5)
 
-    city_hist_dict = weather_data.DateInfo(toronto_id)
-    min_hist_extreme = city_hist_dict.get_min_extrm()
-    max_hist_extreme = city_hist_dict.get_max_extrm()
-    min_extreme_year = city_hist_dict.get_min_extreme_year()
-    max_extreme_year = city_hist_dict.get_max_extreme_year()
-    max_rain, max_rain_year = city_hist_dict.get_max_rain_tuple()
-    max_snow_accumulation, max_snow_accumulation_year = city_hist_dict.get_max_snow_accumulation_tuple()
-    max_snowfall, max_snowfall_year = city_hist_dict.get_max_snowfall_tuple()
-
-    message = "{0} {1} Extremes:\n".format(now.strftime("%b"), now.day)
-    message += "High: {0} C ({1})\n".format(max_hist_extreme,max_extreme_year)
-    message += "Low: {0} C ({1})\n".format(min_hist_extreme,min_extreme_year)
+#Initialize historic info for city
+    city_hist_info = weather_data.HistoricInfoForCity(city_id[str(city_name)])
 
     it_rained = False
     it_snowed = False
 
-    if(max_rain > 0):
-        message_to_add = "Rain: {0} mm ({1})\n".format(max_rain, max_rain_year)
-        if(len(message+message_to_add) < 140):
-            message += message_to_add
-            it_rained = True
+    message = "{0} {1} Extremes:\n".format(now.strftime("%b"), now.day)
+    message += "High: {0} C ({1})\n".format(city_hist_info.max_extrm, city_hist_info.max_extrm_yr)
+    message += "Low: {0} C ({1})\n".format(city_hist_info.min_extrm, city_hist_info.min_extrm_yr)
 
-    if(max_snowfall > 0):
-        message_to_add = "Snow: {0} cm ({1})\n".format(max_snowfall,max_snowfall_year)
-        if(len(message+message_to_add) < 140):
+
+    if(city_hist_info.max_rain > 0):
+       message_to_add = "Rain: {0} mm ({1})\n".format(city_hist_info.max_rain, city_hist_info.max_rain_yr)
+       if twit_bot.combined_less_than_140(message, message_to_add):
+           message += message_to_add
+           it_rained = True
+
+    if(city_hist_info.max_snow > 0):
+        message_to_add = "Snow: {0} cm ({1})\n".format(city_hist_info.max_snow,city_hist_info.max_snow_yr)
+        if twit_bot.combined_less_than_140(message, message_to_add):
             message += message_to_add
             it_snowed = True
 
-    if(max_snow_accumulation > 0):
-        message_to_add = "Depth: {0} cm ({1})\n".format(max_snow_accumulation,max_snow_accumulation_year)
-        if(len(message+message_to_add) < 140):
+    if(city_hist_info.max_snow_accum > 0):
+        message_to_add = "Depth: {0} cm ({1})\n".format(city_hist_info.max_snow_accum,city_hist_info.max_snow_accum_yr)
+        if twit_bot.combined_less_than_140(message, message_to_add):
             message += message_to_add
 
-    message_to_add = random.choice(hashtags)
-    if(len(message+message_to_add) < 140):
-        message += message_to_add
+#add hashtags from hashtag lists
+
+    message = twit_bot.add_if_less_than_140(message, random.choice(hashtags))
 
     if(it_rained):
-        message_to_add = random.choice(rain_hashtags)
-        if(len(message+message_to_add) < 140):
-            message += message_to_add
-
+        message = twit_bot.add_if_less_than_140(message, random.choice(rain_hashtags))
     if(it_snowed):
-        message_to_add =  message_to_add = random.choice(snow_hashtags)
-        if(len(message+message_to_add) < 140):
-            message += message_to_add
-
+        message = twit_bot.add_if_less_than_140(message, random.choice(snow_hashtags))
 
     print(len(message))
     print(message)

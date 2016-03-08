@@ -1,32 +1,34 @@
 import weather_data
 import datetime
 import twit_bot
+from sys import argv
 
-from city_id import toronto_id
+from city_id import city_id
 
 if __name__ == "__main__":
 
+
     now = datetime.datetime.utcnow() - datetime.timedelta(hours=5)
 
-    city_hist_dict = weather_data.DateInfo(toronto_id)
+    if len(argv) < 2:
+        print("Please provide city name as arg, assuming Toronto")
+        city_name = 'Toronto'
+    else:
+        city_name = argv[1]
 
-    min_current, max_current = weather_data.get_min_max()
-    min_current=round(min_current,1)
-    max_current=round(max_current,1)
-    min_hist_extreme = city_hist_dict.get_min_extrm()
-    max_hist_extreme = city_hist_dict.get_max_extrm()
-    min_hist_avg = city_hist_dict.get_min_avg()
-    max_hist_avg = city_hist_dict.get_max_avg()
-    print("min: {0} max: {1}\nmin_avg: {2} max_avg: {3}\nmin_extreme: {4} max_extreme: {5}".format(round(min_current,1), round(max_current,1), min_hist_avg, max_hist_avg,min_hist_extreme, max_hist_extreme))
+    hist_weather = weather_data.HistoricInfoForCity(city_id[city_name])
+    min_current, max_current = weather_data.get_current_min_max_tuple(city_id = city_id[city_name])
+
+    print("min: {0} max: {1}\nmin_avg: {2} max_avg: {3}\nmin_extreme: {4} max_extreme: {5}".format(round(min_current,1), round(max_current,1), hist_weather.min_avg, hist_weather.max_avg,hist_weather.min_extrm, hist_weather.max_extrm))
 
     twit = twit_bot.account()
 
-    if(min_current < min_hist_extreme):
-        twit.tweet_min_extreme(min_current,min_hist_extreme)
-    elif(max_current > max_hist_extreme):
-        twit.tweet_max_extreme(max_current,max_hist_extreme)
-    elif(min_current < min_hist_avg):
-        twit.tweet_min_avg(min_current,min_hist_avg)
-    elif(max_current > max_hist_avg):
-        twit.tweet_max_avg(max_current,max_hist_avg)
+    if(min_current < hist_weather.min_extrm):
+        twit.tweet_min_extreme(min_current, hist_weather.min_extreme, city_name)
+    elif(max_current >  hist_weather.max_extrm):
+        twit.tweet_max_extreme(max_current, hist_weather.max_extrm, city_name)
+    elif(min_current <  hist_weather.min_avg):
+        twit.tweet_min_avg(min_current, hist_weather.min_avg, city_name)
+    elif(max_current >  hist_weather.max_avg):
+        twit.tweet_max_avg(max_current, hist_weather.max_avg, city_name)
 

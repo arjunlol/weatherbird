@@ -1,20 +1,34 @@
-__author__ = 'Fritz'
-
 import urllib.request
 import datetime
+import accounts
+from city_id import city_id
 
+weather_dir = 'historic_weather_data//'
+env_canada_filename = {city_id['Toronto'] : 'historic_weather_data//toronto_city_almanac_extremes.csv',
+                     city_id['Ottawa'] : 'historic_weather_data//ottawa_almanac_extremes.csv',
+                     city_id['Vancouver'] : 'historic_weather_data//vancouver_almanac_extremes.csv',
+                     city_id['Montreal'] : 'historic_weather_data//vancouver_almanac_extremes.csv'}
 
-env_canada_filename={'6167865':'toronto_city_almanac_extremes.csv'}
-
-def convert_k_to_c(k):
-    return k - 273.15
-
-def get_min_max(city_id = 6167865):
-    weather_html = urllib.request.urlopen("http://api.openweathermap.org/data/2.5/weather?id={0}&APPID=530a8105af624df4a72b492620c0b287".format(city_id))
-    weather = eval(weather_html.read())
-    min_current = convert_k_to_c(weather['main']['temp_min'])
-    max_current = convert_k_to_c(weather['main']['temp_max'])
-    return min_current,max_current
+class HistoricInfoForCity:
+    def __init__(self, city_id):
+        self.city_id = city_id
+        time_now = datetime.datetime.utcnow() - datetime.timedelta(hours=5)
+        self.data_info = get_environment_canada_date_dict(env_canada_filename[self.city_id],time_now.month, time_now.day)
+        print(self.data_info)
+        self.max_avg = float(self.data_info['AvgMaxTemp'])
+        self.min_avg = float(self.data_info['AvgMinTemp'])
+        self.max_extrm =  float(self.data_info['HighestTemp'])
+        self.min_extrm =  float(self.data_info['LowestTemp'])
+        self.max_extrm_yr = int(self.data_info['HighestTempYear'])
+        self.min_extrm_yr = int(self.data_info['LowestTempYear'])
+        self.max_rain = float(self.data_info['GreatestRainfall'])
+        self.max_rain_yr = int(self.data_info['GreatestRainfallYear'])
+        self.max_snow = float(self.data_info['GreatestSnowfall'])
+        self.max_snow_yr = int(self.data_info['GreatestSnowfallYear'])
+        self.max_snow_accum = float(self.data_info['MostSnowOnGround'])
+        self.max_snow_accum_yr = int(self.data_info['MostSnowOnGroundYear'])
+        self.max_precip = float(self.data_info['GreatestPrecip'])
+        self.max_precip_yr = int(self.data_info['GreatestPrecipYear'])
 
 def get_environment_canada_date_dict(filename, month, day):
     csv_file = open(filename)
@@ -25,7 +39,6 @@ def get_environment_canada_date_dict(filename, month, day):
             return {}
         if line_list[0] == str(month) and line_list[1] == str(day):
             return parse_environment_canada_line(line_list)
-
 
 def parse_environment_canada_line(csv_date):
     weather_dict = {}
@@ -60,51 +73,12 @@ def parse_environment_canada_line(csv_date):
     weather_dict['MostSnowOnGroundDatQual'] = csv_date[28]
     return weather_dict
 
-class DateInfo:
-    def __init__(self, city_id):
-        self.city_id = city_id
-        time_now = datetime.datetime.utcnow() - datetime.timedelta(hours=5)
-        self.data_info = get_environment_canada_date_dict(env_canada_filename[self.city_id],time_now.month, time_now.day)
-        print(self.data_info)
+def convert_k_to_c(k):
+    return k - 273.15
 
-    def get_max_avg(self):
-        return float(self.data_info['AvgMaxTemp'])
-
-    def get_min_avg(self):
-        return float(self.data_info['AvgMinTemp'])
-
-    def get_max_extrm(self):
-        return float(self.data_info['HighestTemp'])
-
-    def get_max_extreme_year(self):
-        return int(self.data_info['HighestTempYear'])
-
-    def get_min_extrm(self):
-        return float(self.data_info['LowestTemp'])
-
-    def get_min_extreme_year(self):
-        return int(self.data_info['LowestTempYear'])
-
-    def get_max_rain_tuple(self):
-        return float(self.data_info['GreatestRainfall']), int(self.data_info['GreatestRainfallYear'])
-
-    def get_max_snow_accumulation_tuple(self):
-        return float(self.data_info['MostSnowOnGround']), int(self.data_info['MostSnowOnGroundYear'])
-
-    def get_max_snowfall_tuple(self):
-        return float(self.data_info['GreatestSnowfall']), int(self.data_info['GreatestSnowfallYear'])
-
-    def get_greatest_precip_tuple(self):
-        return float(self.data_info['GreatestPrecip']), int(self.data_info['GreatestPrecipYear'])
-
-historic_max_avg={'6167865':{'1':-0.7,'2':0.4, '3':4.7,'4':11.5,'5':18.4, '6':23.8,'7':26.6,'8':25.5,'9':21.0,'10':14.0,'11':7.5, '12':2.1}}
-historic_max_extreme={'6167865':{'1':16.1,'2':14.4, '3':26.7,'4':32.2,'5':34.4,'6':36.7,'7':40.6,'8':38.9,'9':37.8,'10':30.0,'11':23.9, '12':19.9}}
-
-historic_min_avg={'6167865':{'1':-6.7,'2':-5.6,'3':-1.9,'4':4.1,'5':9.9,'6':14.9,'7':18.0,'8':17.4,'9':13.4,'10':7.4,'11':2.3,'12':-3.1}}
-historic_min_extreme={'6167865':{'1':-32.8,'2':-31.7,'3':-26.7,'4':-15.0,'5':-3.9, '6':-2.2,'7':3.9,'8':4.4,'9':-2.2,'10':-8.9,'11':-20.6, '12':-30}}
-
-def get_historic_avg(month, city_id = 6167865):
-    return historic_min_avg[str(city_id)][str(month)], historic_max_avg[str(city_id)][str(month)]
-
-def get_historic_extreme(month, city_id = 6167865):
-    return historic_min_extreme[str(city_id)][str(month)], historic_max_extreme[str(city_id)][str(month)]
+def get_current_min_max_tuple(city_id = 6167865):
+    weather_html = urllib.request.urlopen("http://api.openweathermap.org/data/2.5/weather?id={0}&{1}".format(city_id,accounts.open_weather_map_api_key))
+    weather = eval(weather_html.read())
+    min_current = convert_k_to_c(weather['main']['temp_min'])
+    max_current = convert_k_to_c(weather['main']['temp_max'])
+    return round(min_current,1),round(max_current,1)
