@@ -15,16 +15,24 @@ class account:
         self.api = tweepy.API(auth)
 
     def tweet_min_extreme(self, temp, temp_record, city):
-        self.api.update_status("{0}'s temperature of {1} C is {2} C below the historic record low of {3} C for this date! #extremeweather {4}".format(city, temp, abs(temp - temp_record), temp_record, city_hashtags[str(city)]))
+        message = "{0}'s temperature of {1} C is {2} C below the record low of {3} C for this date! #extremeweather {4}".format(city, temp, abs(temp - temp_record), temp_record, city_hashtags[str(city)])
+        print(message)
+        self.custom_message(message)
 
     def tweet_max_extreme(self, temp, temp_record, city):
-        self.api.update_status("{0}'s temperature of {1} C is {2} C above the historic record high of {3} C for this date! #extremeweather {4}".format(city, temp, abs(temp - temp_record), temp_record, city_hashtags[str(city)]))
+        message = "{0}'s temperature of {1} C is {2} C above the record high of {3} C for this date! #extremeweather {4}".format(city, temp, abs(temp - temp_record), temp_record, city_hashtags[str(city)])
+        print(message)
+        self.custom_message(message)
 
     def tweet_min_avg(self, temp, temp_record, city):
-        self.api.update_status("{0}'s temperature of {1} C is {2} C below the historic average low of {3} C for this date! #extremeweather {4}".format(city, temp, abs(temp - temp_record), temp_record, city_hashtags[str(city)]))
+        message = "{0}'s temperature of {1} C is {2} C below the average low of {3} C for this date! #extremeweather {4}".format(city, temp, abs(temp - temp_record), temp_record, city_hashtags[str(city)])
+        print(message)
+        self.custom_message(message)
 
     def tweet_max_avg(self, temp, temp_record, city):
-        self.api.update_status("{0}'s temperature of {1} C is {2} C above the historic average high of {3} C for this date! #extremeweather {4}".format(city, temp, abs(temp - temp_record), temp_record, city_hashtags[str(city)]))
+        message = "{0}'s temperature of {1} C is {2} C above the average high of {3} C for this date! #extremeweather {4}".format(city, temp, abs(temp - temp_record), temp_record, city_hashtags[str(city)])
+        print(message)
+        self.custom_message(message)
 
     def test_tweet(self,message):
         self.api.update_status(message)

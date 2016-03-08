@@ -14,7 +14,6 @@ class HistoricInfoForCity:
         self.city_id = city_id
         time_now = datetime.datetime.utcnow() - datetime.timedelta(hours=5)
         self.data_info = get_environment_canada_date_dict(env_canada_filename[self.city_id],time_now.month, time_now.day)
-        print(self.data_info)
         self.max_avg = float(self.data_info['AvgMaxTemp'])
         self.min_avg = float(self.data_info['AvgMinTemp'])
         self.max_extrm =  float(self.data_info['HighestTemp'])
