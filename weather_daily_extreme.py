@@ -35,8 +35,8 @@ if __name__ == "__main__":
     it_snowed = False
 
     message = "{0} {1} Extremes:\n".format(now.strftime("%b"), now.day)
-    message += "High: {0} C ({1})\n".format(city_hist_info.max_extrm, city_hist_info.max_extrm_yr)
-    message += "Low: {0} C ({1})\n".format(city_hist_info.min_extrm, city_hist_info.min_extrm_yr)
+    message += "High: {0}°C ({1})\n".format(city_hist_info.max_extrm, city_hist_info.max_extrm_yr)
+    message += "Low: {0}°C ({1})\n".format(city_hist_info.min_extrm, city_hist_info.min_extrm_yr)
 
 
     if(city_hist_info.max_rain > 0):
