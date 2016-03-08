@@ -4,11 +4,11 @@ from accounts import twitter_account
 city_hashtags = {'Toronto':'#torontoweather','Ottawa':'#ottawaweather', 'Montreal':'#mtlweather', "Vancouver":"#vanweather"}
 
 class account:
-    def __init__(self):
-        consumer_key= twitter_account['consumer_key']
-        consumer_secret= twitter_account['consumer_secret']
-        access_key = twitter_account['access_key']
-        access_secret = twitter_account['access_secret']
+    def __init__(self, city_name):
+        consumer_key= twitter_account[str(city_name)]['consumer_key']
+        consumer_secret= twitter_account[str(city_name)]['consumer_secret']
+        access_key = twitter_account[str(city_name)]['access_key']
+        access_secret = twitter_account[str(city_name)]['access_secret']
 
         auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
         auth.set_access_token(access_key, access_secret)

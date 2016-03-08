@@ -30,7 +30,7 @@ if __name__ == "__main__":
     #log data for future graphing
     data_display.log_to_file('data//{0}-{1}'.format(city_name,str(now.date())), min_current, max_current, min_current < hist_weather.min_extrm, max_current >  hist_weather.max_avg, now)
 
-    twit = twit_bot.account()
+    twit = twit_bot.account(city_name)
 
     if(min_current < hist_weather.min_extrm):
         twit.tweet_min_extreme(min_current, hist_weather.min_extreme, city_name)

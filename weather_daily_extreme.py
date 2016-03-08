@@ -68,5 +68,5 @@ if __name__ == "__main__":
     print(len(message))
     print(message)
 
-    twit = twit_bot.account()
+    twit = twit_bot.account(city_name)
     twit.custom_message(message)
