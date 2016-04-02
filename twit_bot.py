@@ -40,6 +40,10 @@ class account:
     def custom_message(self,message):
         self.api.update_status(message)
 
+    def tweet_message_with_photo(self, message, file_filename, city_name):
+        message += ' ' + city_hashtags[str(city_name)]
+        self.api.update_with_media(file_filename,message)
+
 def combined_less_than_140(message,message_to_add):
     if len(message + message_to_add) <= 140:
         return True
