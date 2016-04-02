@@ -1,5 +1,6 @@
-import matplotlib.pyplot as plot
 import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plot
 import datetime
 import data_display
 import numpy as np
@@ -10,7 +11,7 @@ from sys import argv
 
 if __name__ == "__main__":
 
-    matplotlib.use('Agg')
+
 
     if len(argv) < 2:
         print("Please provide city name")
