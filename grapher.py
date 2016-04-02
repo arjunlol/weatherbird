@@ -15,8 +15,8 @@ if __name__ == "__main__":
     else:
         city_name = argv[1]
 
-    start_date = datetime.datetime.utcnow() - datetime.timedelta(days = 7)
-    end_date = datetime.datetime.utcnow()
+    start_date = datetime.datetime.utcnow() - datetime.timedelta(days = 7.5)
+    end_date = datetime.datetime.utcnow() - datetime.timedelta(days = 0.5)
 
     logged_data_by_date = data_display.get_city_logged_data(city_name, start_date, end_date)
 
