@@ -7,9 +7,9 @@ import random
 
 from city_id import city_id
 
-hashtags = ['#makeupyourmind ','#fromthevault ','#wildweather ','#xweather ']
-snow_hashtags = ['#toqueson ','#snowday ','#frosty ','#blzrd ', '#snowday ']
-rain_hashtags = ['#wetpets ','#brella ','#catsndogs ','#monsoon ']
+hashtags = ['#fromthevault ','#wildweather ','#xweather ']
+snow_hashtags = ['#snowday ','#blzrd ']
+rain_hashtags = ['#catsndogs ','#monsoon ']
 
 if __name__ == "__main__":
 
