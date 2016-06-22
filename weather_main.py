@@ -8,7 +8,6 @@ from city_id import city_id
 
 if __name__ == "__main__":
 
-
     if len(argv) < 2:
         print("Please provide city name and timezone delay from UTC, assuming toronto and 5")
         city_name = 'Toronto'
@@ -36,8 +35,8 @@ if __name__ == "__main__":
         twit.tweet_min_extreme(min_current, hist_weather.min_extreme, city_name)
     elif(max_current >  hist_weather.max_extrm):
         twit.tweet_max_extreme(max_current, hist_weather.max_extrm, city_name)
-    elif(min_current <  hist_weather.min_avg):
+    elif(min_current + 1 <  hist_weather.min_avg):
         twit.tweet_min_avg(min_current, hist_weather.min_avg, city_name)
-    elif(max_current >  hist_weather.max_avg):
+    elif(max_current - 1 >  hist_weather.max_avg):
         twit.tweet_max_avg(max_current, hist_weather.max_avg, city_name)
 
